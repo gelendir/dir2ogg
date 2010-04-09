@@ -423,9 +423,10 @@ class Convert(Id3TagHandler):
     def convert(self):
         ''' Convert wav -> ogg.'''
         info('Converting "%s" (using %s as decoder)...' % (self.song, self.decoder))
-        if self.songwav == self.song:
+        if os.path.splitext(self.song)[1][1:].lower() == 'wav':
             success = True
             dec = None
+            self.songwav = self.song
         else:
             success, dec = self.decode()
         if not success:
