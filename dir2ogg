@@ -102,6 +102,8 @@ def read_opts():
     parser.add_option('-P', '--no-pipe', action='store_true', help='Do not use pipes, use temporary wav files')
     parser.add_option('-v', '--verbose', action='store_true', help='verbose output')
     parser.add_option('-Q', '--quiet', action='store_true', help='do not display progress report.')
+    parser.add_option('-o', '--output-dir', metavar='DIR', help='Converted files will be placed in DIR. Default : same directory as original file')
+    parser.add_option('-s', '--strip-path', action='store_true', help='Strip leading directories from file path when placing converted file')
 
     # Setup decoders
     commands = {'mp3': ('mpg123', 'mpg321', 'lame',  'mplayer'),
@@ -331,12 +333,13 @@ class Convert(Id3TagHandler):
     Methods are the conversions we can do
     '''
 
-    def __init__(self, song, conf):
+    def __init__(self, song, path_prefix, conf):
         self.device  = ""
         self.track   = ""
         Id3TagHandler.__init__(self, song)
         self.conf    = conf
-        song_root    = os.path.splitext(song)[0] + "."
+        song_root    = os.path.join(path_prefix, os.path.basename(song))
+        song_root    = os.path.splitext(song_root)[0] + "."
         self.songwav = song_root + 'wav'
         self.songogg = song_root + 'ogg'
         self.decoder = ''
@@ -608,6 +611,12 @@ class ConvertDirectory:
         if os.path.exists(directory) == 0:
             fatal('Directory: "%s" not found' % directory)
 
+        if conf.output_dir:
+            if os.path.exists(conf.output_dir):
+                self.output_dir = os.path.normpath(conf.output_dir) + os.path.sep
+            else:
+                fatal('Directory: "%s" not found' % conf.output_dir)
+
         self.directory = directory = os.path.normpath(directory) + os.path.sep
         self.songs = sorted(mmatch(files, conf.filters, False))
 
@@ -615,7 +624,18 @@ class ConvertDirectory:
             self.print_if_verbose()
 
         for song in self.songs:
-            Convert(directory + song, conf)
+
+            destination = ""
+            if conf.output_dir:
+                destination += self.output_dir
+            if not conf.strip_path:
+                destination += self.directory
+                destination = os.path.normpath(destination)
+
+            if not os.path.exists(destination):
+                os.makedirs(destination)
+                
+            Convert(directory + song, destination, conf)
 
     def print_if_verbose(self):
         ''' Echo files to be converted if verbose flag is set.'''
