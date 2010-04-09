@@ -1,0 +1,180 @@
+dir2ogg (0.11.8) RELEASED; urgency=low
+
+  * Process files in alphabetical order (Closes: #536040).
+  * Support converting directories without specifying -d (Closes: #535209).
+  * Introduce support for Monkey's Audio with APEv2 tags (LP: #279834).
+  * Introduce support for Musepack with APEv2 tags.
+  * Introduce support for WavPack files with APEv2 tags.
+  * Make output more readable:
+    - Progress message stating the current file and the decoder.
+    - New command-line option -Q,--quiet to not display progress from oggenc.
+    - Do not show progress from decoder at at all, as it may conflict with
+      the output of oggenc.
+
+ -- Julian Andres Klode <jak@debian.org>  Tue, 04 Aug 2009 20:23:00 +0200
+
+dir2ogg (0.11.7) RELEASED; urgency=low
+
+  * Recognize the track number in mp3 files
+  * Fix problems with mpg123 and files not using 44100Hz (LP: #272341)
+  * Make --preserve-wav work when using mplayer (Closes: #513566)
+  * Fix problem where tags from one file appear in other files (LP: #276037)
+  * Inform people that converting CDs is not well supported.
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 03 May 2009 14:45:59 +0200
+
+dir2ogg (0.11.6) RELEASED; urgency=low
+
+  * The "Marek Palatinus" release
+
+  [ Marek Palatinus ]
+  * Bugfix: function grab_flac_tags() is missing argument "convert" in
+    calling grab_common. (First reported by Gary Jackson)
+  * Bugfix: When --smart-mp3 was used and some files was not "mp3", they
+    used quality of last tested mp3 file. Currently, when detection
+    fails, default quality given thru cmdline parameter is used instead.
+  * Bugfix: Quality is count as float, not integer (problem in oggenc
+    calling)
+  * Improvement: Added parameter "-T --smart-mp3-correction". You can
+    specify difference between detected quality and used quality. When
+    algorithm detected quality "6" and you specify -T 2, quality 4 (= 6
+    - 2) is used. It accept also floats and negative numbers. So you can
+    raise quality to 1.5 by adding "-T -1.5".
+  * Improvement: Better regression function.
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Mon, 14 Jul 2008 20:47:17 +0200
+
+dir2ogg (0.11.5) RELEASED; urgency=low
+
+  * Fix support for files with no headers (LP: #229179)
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Wed, 14 May 2008 17:26:52 +0200
+
+dir2ogg (0.11.4) RELEASED; urgency=medium
+
+  * Print error message if CD is not in FreeDB (LP: #198845)
+  * Use /dev/stdout instead of - for mpg123. Fixes problems with newer mpg123
+    versions (problem reported by: drac@gentoo.org)
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Tue, 01 Apr 2008 16:06:58 +0200
+
+dir2ogg (0.11.3) RELEASED; urgency=low
+
+  * More complete fix for tags with non-ascii values
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Tue, 25 Mar 2008 16:39:38 +0100
+
+dir2ogg (0.11.2) RELEASED; urgency=low
+
+  * Fix FLAC tags with non-ascii values (Closes: #466107)
+  * Add -f as a shortcut for --convert-flac
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 17 Feb 2008 11:58:20 +0100
+
+dir2ogg (0.11.1) RELEASED; urgency=low
+
+  * Fix dir2ogg's wav support, so it works again.
+  * More robust tag handling, fixes support for WMA/ASF
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sat, 15 Dec 2007 22:56:54 +0100
+
+dir2ogg (0.11) RELEASED; urgency=low
+
+  * Fix mpg123 (decode all frames again)
+  * Add smart-mp3 feature by Marek Palatinus. (Closes: #437263)
+  * Update __version__ and __date__
+  * Improve first line of output and the output of -l
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 25 Nov 2007 13:29:29 +0100
+
+dir2ogg (0.11~rc1) RELEASED; urgency=low
+
+  * New features:
+    - Heavily Improved MP3 Support (switched to mutagen.id3 from mutagen.easyid3)
+    - Support for ALAC Audio Files (use --m4a-decoder=alac-decoder)
+  * Bug fixes:
+    - MPlayer can now work with comma in filename (LP: #155471)
+    - Convert bool and int tags to string
+    - Convert all tag names to lowercase for filtering purposes
+  * Coding style / Cleanup
+    - Remove duplicated code (e.g.: globally define file extensions)
+    - Rename functions, classes, variables to match pylint
+    - Make MyConfig a function => read_opts
+  * Documentation:
+    - Update man page
+  * Other stuff:
+    - No colorized output anymore, easier to work with
+    - cdparanoia: disable all paranoia checks
+    - Print traceback if tag saving failed
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 04 Nov 2007 17:27:17 +0100
+
+dir2ogg (0.11~beta1) RELEASED; urgency=low
+
+  * Add ability to select decoder by --XXX-decoder= switches
+  * CD-Ripper: Support mplayer for ripping
+  * Improved tags support for FLAC, M4A and WMA
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 30 Sep 2007 17:49:47 +0200
+
+dir2ogg (0.11~alpha3) RELEASED; urgency=low
+
+  * Bugfix: Enable conversion of MP3 files
+  * FLAC: Fix names of the decoders and add 'flac -d' as an decoder
+  * Bugfix: Check for decoders for files specified on commandline
+  * Rename --clean-up to --delete-input and remove -c
+  * Save decoder commands in a dict, remove exec call
+  * Remove enc.wait()
+  * Warn if there are not tags to save.
+  * NEW: CD-Ripper with MusicBrainz support and FreeDB Fallback
+  * Cleanup: Do not import string (deprecated) and re (unused)
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Fri, 17 Aug 2007 15:03:07 +0200
+
+dir2ogg (0.11~alpha2) RELEASED; urgency=low
+
+  * NEW Features:
+    - Support for FLAC files
+    - New tags: 'discid', 'musicbrainz_discid', 'musicbrainz_sortname',
+      'tracktotal'
+  * New commandline and config class
+    - Use optparse to parse options
+    - check which decoders to use at startup
+  * More flexible Convert class:
+    - Use subprocess instead of os.system
+    - Support pipes (except for mplayer)
+  * Removal of unneeded functions and classes:
+    - RM: CleanUp      - Filter filenames (not needed anymore by subprocess)
+    - RM: getOptions() - Options parser, replaced with MyConfig
+    - RM: showUsage()  - Print options summary, done by optparse
+  * Less code: 90 lines less then alpha1
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 05 Aug 2007 12:15:20 +0200
+
+dir2ogg (0.11~alpha1) RELEASED; urgency=low
+
+  * NEWS: Redesigned, using debian changelog style (easier for me)
+  * Redesigned tag support to support multiple values per key (- ca. 90 lines)
+  * Removed --delete-* options (didn't work) and added --delete-input
+  * more simple code
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 29 Jul 2007 16:35:50 +0200
+
+dir2ogg (0.10.1) RELEASED; urgency=medium
+
+  * Use mutagen to write the tags to the OGG File (Fixes problems with
+    unicode values which can't be converted to ascii ones)
+  * Fix the manpage (description for --convert-wma: replaced M4A with WMA)
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Wed, 18 Jul 2007 22:38:55 +0200
+
+dir2ogg (0.10) RELEASED; urgency=low
+
+  * Took over development
+  * Switch to GNU General Public License
+  * Use mutagen for ID3 Tags, M4A and WMA Informations
+  * Support decoding of M4A files without faad
+  * Fix manpage
+  * Cleanups, improve readability of README
+
+ -- Julian Andres Klode <jak@jak-linux.org>  Sun, 15 Jul 2007 17:28:15 +0200
