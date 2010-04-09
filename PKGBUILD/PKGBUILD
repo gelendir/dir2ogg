@@ -1,0 +1,57 @@
+# Contributor: Daniel Fiser <danfis@danfis.cz>
+# Contributor: Gregory Eric Sanderson <gzou2000@gmail.com>
+pkgname=dir2ogg-git
+pkgrel=1
+pkgver=20100409
+pkgdesc="Custom modifications to dir2ogg. Added options --output-dir and --strip-path"
+arch=(i686 x86_64)
+url="http://jak-linux.org/projects/dir2ogg/"
+license=('GPL')
+depends=(python mutagen vorbis-tools)
+makedepends=(git)
+optdepends=("mplayer: default decoder if others aren't installed"
+    'faad2: decoding of M4A'
+    'lame: decoding of MP3'
+    'cdparanoia: CD ripping (experimental)'
+    'python-musicbrainz2: CD track tagging'
+    'libdiscid: CD identification')
+provides=('dir2ogg')
+conflicts=('dir2ogg')
+replaces=()
+backup=()
+install=
+source=()
+noextract=()
+md5sums=()
+
+_gitroot="git://github.com/gregory-sanderson/dir2ogg.git"
+_gitname="dir2ogg"
+
+build() {
+    cd "$srcdir"
+    msg "Connecting to GIT server...."
+
+    if [ -d $_gitname ] ; then
+      cd $_gitname && git pull origin
+      msg "The local files are updated."
+    else
+      git clone $_gitroot $_gitname
+    fi
+
+    msg "GIT checkout done or server timeout"
+    msg "Starting make..."
+
+    rm -rf "$srcdir/$_gitname-build"
+    git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+    cd "$srcdir/$_gitname-build"
+
+    #
+    # BUILD HERE
+    #
+
+    mkdir -p "$pkgdir/usr/bin"
+    mkdir -p "$pkgdir/usr/share/man/man1"
+
+    cp dir2ogg "$pkgdir/usr/bin"
+    cp dir2ogg.1 "$pkgdir/usr/share/man/man1"
+}
