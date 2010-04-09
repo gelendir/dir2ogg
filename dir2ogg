@@ -483,7 +483,14 @@ class ConvertTrack(Convert):
         self.device, self.track, self.tags, self.conf = device, track, tags, conf
         self.song    = ''
         self.songwav = "audio.wav"
-        self.songogg = "%(artist)s/%(album)s/%(ntracknumber)s - %(title)s.ogg" % tags
+
+        prefix = ""
+        if conf.output_dir:
+            prefix += os.path.normpath(conf.output_dir) + os.path.sep
+        if not conf.strip_path:
+            prefix += "%(artist)s/%(album)s/" % tags
+
+        self.songogg = prefix + "%(ntracknumber)s - %(title)s.ogg" % tags
         self.conf.preserve_wav = False
         self.decoder           = 'cd-' + self.conf.cd_decoder
         self.convert()
