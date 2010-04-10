@@ -88,6 +88,7 @@ def read_opts():
     parser.add_option('-r', '--recursive', action='store_true', help='convert files in all subdirectories of all directories specified as arguments')
     parser.add_option('-c', '--cdda', action='store_true', help="convert audio cd in all devices specified as arguments (or default: /dev/cdrom) [EXPERIMENTAL]")
     parser.add_option('-q', '--quality', metavar='N', default=3.0, type='float', help='quality. N is a number from 1-10 (default %default)')
+    parser.add_option('-F', '--force-overwrite', action='store_true', default=False, help='If file already exists, overwrite it')
     parser.add_option('-t', '--smart-mp3', action='store_true', help='try to use similar quality as original mp3 file (overwrites -q)')
     parser.add_option('-T', '--smart-mp3-correction', metavar='N', default=0.0, type='float', help='decrease detected quality (implies -t)')
     parser.add_option('-n', '--no-mp3', dest='convert_mp3', action='store_false', default=True, help="don't convert mp3s (use with '-d' or '-r')")
@@ -371,7 +372,12 @@ class Convert(Id3TagHandler):
                 if ext == 'mp3' and  (self.conf.smart_mp3 or \
                                       self.conf.smart_mp3_correction):
                     self.smart_mp3()
-        self.convert()
+
+        if conf.force_overwrite or not os.path.exists(self.songogg):
+            self.convert()
+        else:
+            warn('%s already exists ! Will not convert file (you can force overwriting the file with --force-overwrite)' % self.songogg)
+
         # (smartmp3) Replacing quality by default value
         self.conf.quality = original_quality
 
