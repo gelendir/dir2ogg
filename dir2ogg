@@ -51,6 +51,7 @@ FILTERS = {'mp3': ('*.mp3',),
            'ape': ('*.ape',),
            'wv': ('*.wv','*.wvc'),
            'wav': ('*.wav', ),
+           'tta': ('*.tta', ),
            }
 
 def mmatch(names, patterns, rbool=True):
@@ -98,6 +99,7 @@ def read_opts():
     parser.add_option('-w', '--convert-wav', action='store_true', help="convert all WAV files found in directories")
     parser.add_option('-W', '--convert-wma', action='store_true', help="convert all WMA files found in directories")
     parser.add_option('-V', '--convert-wv', action='store_true', help="convert all WV files found in directories")
+    parser.add_option('-u', '--convert-tta', action='store_true', help="convert all TrueAudio files found in directories")
     parser.add_option('--delete-input', action='store_true', help='delete input files')
     parser.add_option('-p', '--preserve-wav', action='store_true', help='keep the wav files (also includes -P)')
     parser.add_option('-P', '--no-pipe', action='store_true', help='Do not use pipes, use temporary wav files')
@@ -115,6 +117,7 @@ def read_opts():
         'ape': ('mac', 'mplayer'),
         'wv':  ('wvunpack', 'mplayer'),
         'mpc': ('mpcdec', 'mplayer'),
+        'tta': ('mplayer',),
         }
 
     for ext, dec in commands.items():
@@ -307,8 +310,8 @@ class Id3TagHandler:
         from mutagen.flac import FLAC, error
         self.grab_common(FLAC, error=error)
 
-    def grab_mp3_tags(self):
-        '''Import MP3 tags handler, and call commonGrab'''
+    def grab_id3_tags(self):
+        '''Import ID3v2 tags handler, and call commonGrab'''
         from mutagen.id3 import ID3, error
         convert = {'TPE1': 'artist', 'TPE2': 'albumartist', 'TPE3': 'conductor', 'TPE4': 'remixer',
                    'TCOM': 'composer', 'TCON': 'genre', 'TALB': 'album', 'TIT1': 'grouping',
@@ -319,6 +322,12 @@ class Id3TagHandler:
                    'TSOP': 'artistsort', 'TSOT': 'titlesort','TPUB': 'label',
                    'TRCK': 'tracknumber'}
         self.grab_common(ID3, convert, error)
+
+    def grab_mp3_tags(self):
+        self.grab_id3_tags()
+
+    def grab_tta_tags(self):
+        self.grab_id3_tags()
 
     def list_if_verbose(self):
         info('Meta-tags I will write:')
