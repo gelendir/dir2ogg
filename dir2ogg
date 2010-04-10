@@ -33,6 +33,7 @@ Scratch tags using the filename will be written for wav files (and mp3s with no 
 
 import sys
 import os, os.path
+import shutil
 import re
 import warnings
 from fnmatch import _cache, translate
@@ -414,7 +415,7 @@ class Convert(Id3TagHandler):
             if self.decoder == 'mplayer':
                 # Move the file for mplayer (which uses tempwav), so it works
                 # for --preserve-wav.
-                os.rename(tempwav, self.songwav)
+                shutil.move(tempwav, self.songwav)
             if retcode != 0:
                 return (False, None)
             else:
