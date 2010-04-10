@@ -117,7 +117,7 @@ def read_opts():
         'ape': ('mac', 'mplayer'),
         'wv':  ('wvunpack', 'mplayer'),
         'mpc': ('mpcdec', 'mplayer'),
-        'tta': ('mplayer',),
+        'tta': ('ttaenc', 'mplayer'),
         }
 
     for ext, dec in commands.items():
@@ -411,6 +411,7 @@ class Convert(Id3TagHandler):
                    'lame':    ['lame', '--quiet', '--decode', self.song, outfile],
                    'mac':     ['mac', self.song, outfile, '-d'],
                    'mpcdec':  ['mpcdec', self.song, outfile],
+                   'ttaenc':  ['ttaenc', '-d', self.song, '-o', outfile],
                    'mplayer': ['mplayer', '-really-quiet', '-vo', 'null', '-vc' ,'dummy', '-af', 'resample=44100', '-ao', 'pcm:file=' + tempwav, self.song],
                    'wvunpack': ['wvunpack', '-q', self.song, '-o', outfile],
                    'alac-decoder': ['alac-decoder',  self.song],
