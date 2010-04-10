@@ -106,7 +106,13 @@ def read_opts():
     parser.add_option('-v', '--verbose', action='store_true', help='verbose output')
     parser.add_option('-Q', '--quiet', action='store_true', help='do not display progress report.')
     parser.add_option('-o', '--output-dir', metavar='DIR', help='Converted files will be placed in DIR. Default : same directory as original file')
-    parser.add_option('-s', '--strip-path', action='store_true', help='Strip leading directories from file path when placing converted file')
+    strip_help = """
+Strip leading directories from file path before placing converted file.
+If STRIP is a number, remove STRIP directories from the beggining of the path. (0 = all directories)
+If STRIP is a string, remove up to (and including) the location of STRIP in the path.
+if STRIP is 'auto', remove the longest path prefix that is common to all file paths.
+"""
+    parser.add_option('-s', '--strip-path', metavar='STRIP', action='store', help=strip_help)
 
     # Setup decoders
     commands = {'mp3': ('mpg123', 'mpg321', 'lame',  'mplayer'),
@@ -653,12 +659,17 @@ class ConvertDirectory:
                 destination = ""
                 if conf.output_dir:
                     destination += self.output_dir
-                if not conf.strip_path:
-                    destination += self.directory
-                    destination = os.path.normpath(destination)
+                else:
+                    destination += directory
+                if conf.strip_path:
+                    if isinstance(conf.strip_path, int) and conf.strip_path > 0:
+                        destination += os.path.sep.join(directory.split(os.path.sep)[conf.strip_path+1:])
+                    elif isinstance(conf.strip_path, str):
+                        destination += directory.partition(conf.strip_path)[2].lstrip(os.path.sep)
+
                 if not os.path.exists(destination):
                     os.makedirs(destination)
-                
+
                 Convert(directory + song, destination, conf)
 
     def print_if_verbose(self):
@@ -705,6 +716,13 @@ def main():
                 rdirs.update(return_dirs(os.path.abspath(path)))
             else:
                 rdirs[os.path.abspath(path)] = os.listdir(path)
+
+        if conf.strip_path:
+            if conf.strip_path.isdigit():
+                conf.strip_path = int(conf.strip_path)
+            elif len(conf.strip_path) == 'auto':
+                conf.strip_path = os.path.commonprefix(rdirs.keys())
+
         for directory, files in rdirs.items():
             ConvertDirectory(conf, directory, files)
 
