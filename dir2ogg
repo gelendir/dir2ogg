@@ -133,8 +133,11 @@ def read_opts():
     options.filters    = []
     for ext, pat in FILTERS.items():
         # Activate Encoders for files on the commandline
-        if options.convert_all or mmatch(args, pat):
+        if options.convert_all:
             setattr(options, 'convert_' + ext, True)
+        elif mmatch(args, pat) and not (ext == 'mp3' and options.convert_mp3 == False):
+            setattr(options, 'convert_' + ext, True)
+
         if getattr(options, 'convert_' + ext):
             options.filters += pat
         # Missing decoders
@@ -634,17 +637,19 @@ class ConvertDirectory:
 
         for song in self.songs:
 
-            destination = ""
-            if conf.output_dir:
-                destination += self.output_dir
-            if not conf.strip_path:
-                destination += self.directory
-                destination = os.path.normpath(destination)
+            ext = os.path.splitext(song)[1][1:].lower()
+            if getattr(conf, 'convert_' + ext):
 
-            if not os.path.exists(destination):
-                os.makedirs(destination)
+                destination = ""
+                if conf.output_dir:
+                    destination += self.output_dir
+                if not conf.strip_path:
+                    destination += self.directory
+                    destination = os.path.normpath(destination)
+                if not os.path.exists(destination):
+                    os.makedirs(destination)
                 
-            Convert(directory + song, destination, conf)
+                Convert(directory + song, destination, conf)
 
     def print_if_verbose(self):
         ''' Echo files to be converted if verbose flag is set.'''
