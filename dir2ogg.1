@@ -25,7 +25,7 @@ compatibility purposes only and does not need to be specified anymore.
 like \fI\-d\fP but descends recursively into directories.
 .TP
 \fB\-c or \-\-cdda\fP
-Convert an audio CD into ogg. You may pass the device as an argument to the script (default: /dev/cdrom). Requires cdparanoia orq icedax or mplayer
+Convert an audio CD into ogg. You may pass the device as an argument to the script (default: /dev/cdrom). Requires cdparanoia or icedax or mplayer
 .TP
 \fB\-p or \-\-preserve-wav\fP
 preserve all WAV files. By default they are deleted.
@@ -44,6 +44,12 @@ increase \fIdir2ogg\fP's verbosity.
 Do not display progress messages, except the name of the file which is
 currently converted. Some decoders provide no way to disable messages and thus
 may still display some.
+.TP
+\fB\-o DIR or \-\-output\-dir=DIR\fP
+Write all converted files to directory \fIDIR\fP. If \-\-directory or \-\-recursive are used, the same directory structure will be recreated in \fIDIR\fP.
+.TP
+\fB\-s or \-\-strip\-path\fP
+(Will only apply if \-\-output\-dir and \-\-recursive are used.) Remove all leading directories from the file path of the converted files. In essence, all converted files will be placed in the root of \-\-output\-dir. E.g: output/path/to/audio/file.wav will become output/file.wav
 
 .SS Conversion options
 .TP
@@ -78,6 +84,10 @@ to Ogg Vorbis.
 .TP
 \fB\-V or \-\-convert-wv\fP
 Convert all WV (WavPack) files found in the directories given on the
+command-line to Ogg Vorbis.
+.TP
+\fB\-u or \-\-convert-tta\fP
+Convert all TTA (TrueAudio) files found in the directories given on the
 command-line to Ogg Vorbis.
 .TP
 \fB\-n or \-\-no-mp3\fP

@@ -24,6 +24,7 @@ Requirements:
  - WMA Conversion: mplayer
  - MP3 Conversion: mpg123, mpg321, lame or mplayer
  - FLAC Conversion: no extra software required (ogg123 from vorbis-tools)
+ - TTA Conversion : ttaenc or mplayer
  - CD Ripping: cdparanoia, icedax or mplayer
 
 Usage:
@@ -72,6 +73,7 @@ Authors:
  Contributors:
   Cameron Stone <camerons@cse.unsw.edu.au>
   Marek Palatinus <marek@palatinus.cz>
+  Gregory Eric Sanderson <gzou2000@gmail.com>
 
 Date:
- February 17, 2008
+ April 10, 2010
