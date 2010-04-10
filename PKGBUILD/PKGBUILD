@@ -7,11 +7,12 @@ pkgdesc="Custom modifications to dir2ogg. Added options --output-dir and --strip
 arch=(i686 x86_64)
 url="http://jak-linux.org/projects/dir2ogg/"
 license=('GPL')
-depends=(python mutagen vorbis-tools)
+depends=(python mutagen vorbis-tools mplayer)
 makedepends=(git)
 optdepends=("mplayer: default decoder if others aren't installed"
     'faad2: decoding of M4A'
     'lame: decoding of MP3'
+    'ttaenc: decoding of TTA'
     'cdparanoia: CD ripping (experimental)'
     'python-musicbrainz2: CD track tagging'
     'libdiscid: CD identification')
