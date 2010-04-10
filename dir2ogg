@@ -665,13 +665,14 @@ class ConvertDirectory:
                 destination = ""
                 if conf.output_dir:
                     destination += self.output_dir
-                else:
-                    destination += directory
                 if conf.strip_path:
                     if isinstance(conf.strip_path, int) and conf.strip_path > 0:
                         destination += os.path.sep.join(directory.split(os.path.sep)[conf.strip_path+1:])
                     elif isinstance(conf.strip_path, str):
                         destination += directory.partition(conf.strip_path)[2].lstrip(os.path.sep)
+                else:
+                    destination += directory
+                destination = os.path.normpath(destination)
 
                 if not os.path.exists(destination):
                     os.makedirs(destination)
