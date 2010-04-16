@@ -45,12 +45,17 @@ Do not display progress messages, except the name of the file which is
 currently converted. Some decoders provide no way to disable messages and thus
 may still display some.
 .TP
+\fB\-F or \-\-force\fP
+Forces dir2ogg to overwrite ogg files with the newly converted ones if they have the same file name.
+.TP
 \fB\-o DIR or \-\-output\-dir=DIR\fP
 Write all converted files to directory \fIDIR\fP. If \-\-directory or \-\-recursive are used, the same directory structure will be recreated in \fIDIR\fP.
 .TP
-\fB\-s or \-\-strip\-path\fP
-(Will only apply if \-\-output\-dir and \-\-recursive are used.) Remove all leading directories from the file path of the converted files. In essence, all converted files will be placed in the root of \-\-output\-dir. E.g: output/path/to/audio/file.wav will become output/file.wav
-
+\fB\-s STRIP or \-\-strip=STRIP\fP
+(Will only apply if \-\-output\-dir and \-\-recursive are used.) Remove all leading directories from the file path of the converted files. 
+If STRIP is a number, remove STRIP directories from the beggining of the path. (0 = all directories)
+If STRIP is a string, remove up to (and including) the location of STRIP in the path.
+if STRIP is 'auto', remove the longest path prefix that is common to all file paths. For example, you have a music collection you would like to convert in /home/user/music/collection and your output directory is /output/dir. Without \-\-strip, all the files would go into /output/dir/home/user/music/collection. If \-\-strip is 2, then the files would go to /output/dir/music/collection instead. Similarly, if \-\-strip is 'home/user/music/', files would go to /ouput/dir/collection.
 .SS Conversion options
 .TP
 \fB\-\-convert-all\fP

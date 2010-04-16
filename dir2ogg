@@ -88,7 +88,7 @@ def read_opts():
     parser.add_option('-r', '--recursive', action='store_true', help='convert files in all subdirectories of all directories specified as arguments')
     parser.add_option('-c', '--cdda', action='store_true', help="convert audio cd in all devices specified as arguments (or default: /dev/cdrom) [EXPERIMENTAL]")
     parser.add_option('-q', '--quality', metavar='N', default=3.0, type='float', help='quality. N is a number from 1-10 (default %default)')
-    parser.add_option('-F', '--force-overwrite', action='store_true', default=False, help='If file already exists, overwrite it')
+    parser.add_option('-F', '--force', action='store_true', default=False, help='If file already exists, overwrite it')
     parser.add_option('-t', '--smart-mp3', action='store_true', help='try to use similar quality as original mp3 file (overwrites -q)')
     parser.add_option('-T', '--smart-mp3-correction', metavar='N', default=0.0, type='float', help='decrease detected quality (implies -t)')
     parser.add_option('-n', '--no-mp3', dest='convert_mp3', action='store_false', default=True, help="don't convert mp3s (use with '-d' or '-r')")
@@ -107,13 +107,7 @@ def read_opts():
     parser.add_option('-v', '--verbose', action='store_true', help='verbose output')
     parser.add_option('-Q', '--quiet', action='store_true', help='do not display progress report.')
     parser.add_option('-o', '--output-dir', metavar='DIR', help='Converted files will be placed in DIR. Default : same directory as original file')
-    strip_help = """
-Strip leading directories from file path before placing converted file.
-If STRIP is a number, remove STRIP directories from the beggining of the path. (0 = all directories)
-If STRIP is a string, remove up to (and including) the location of STRIP in the path.
-if STRIP is 'auto', remove the longest path prefix that is common to all file paths.
-"""
-    parser.add_option('-s', '--strip-path', metavar='STRIP', action='store', help=strip_help)
+    parser.add_option('-s', '--strip', metavar='STRIP', action='store', help="Strip leading directories from converted file path. STRIP can be a number, a string, or 'auto'. See man page for details.")
 
     # Setup decoders
     commands = {'mp3': ('mpg123', 'mpg321', 'lame',  'mplayer'),
