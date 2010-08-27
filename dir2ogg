@@ -367,10 +367,10 @@ class Convert(Id3TagHandler):
                                       self.conf.smart_mp3_correction):
                     self.smart_mp3()
 
-        if conf.force_overwrite or not os.path.exists(self.songogg):
+        if hasattr(conf, 'force') or not os.path.exists(self.songogg):
             self.convert()
         else:
-            warn('%s already exists ! Will not convert file (you can force overwriting the file with --force-overwrite)' % self.songogg)
+            warn('%s already exists ! Will not convert file (you can force overwriting the file with --force)' % self.songogg)
 
         # (smartmp3) Replacing quality by default value
         self.conf.quality = original_quality
@@ -508,7 +508,7 @@ class ConvertTrack(Convert):
         prefix = ""
         if conf.output_dir:
             prefix += os.path.normpath(conf.output_dir) + os.path.sep
-        if not conf.strip_path:
+        if hasattr(conf, 'strip'):
             prefix += "%(artist)s/%(album)s/" % tags
 
         self.songogg = prefix + "%(ntracknumber)s - %(title)s.ogg" % tags
@@ -659,11 +659,11 @@ class ConvertDirectory:
                 destination = ""
                 if conf.output_dir:
                     destination += self.output_dir
-                if conf.strip_path:
-                    if isinstance(conf.strip_path, int) and conf.strip_path > 0:
-                        destination += os.path.sep.join(directory.split(os.path.sep)[conf.strip_path+1:])
-                    elif isinstance(conf.strip_path, str):
-                        destination += directory.partition(conf.strip_path)[2].lstrip(os.path.sep)
+                if hasattr(conf, 'strip'):
+                    if isinstance(conf.strip, int) and conf.strip > 0:
+                        destination += os.path.sep.join(directory.split(os.path.sep)[conf.strip+1:])
+                    elif isinstance(conf.strip, str):
+                        destination += directory.partition(conf.strip)[2].lstrip(os.path.sep)
                 else:
                     destination += directory
                 destination = os.path.normpath(destination)
@@ -718,11 +718,11 @@ def main():
             else:
                 rdirs[os.path.abspath(path)] = os.listdir(path)
 
-        if conf.strip_path:
-            if conf.strip_path.isdigit():
-                conf.strip_path = int(conf.strip_path)
-            elif len(conf.strip_path) == 'auto':
-                conf.strip_path = os.path.commonprefix(rdirs.keys())
+        if hasattr(conf, 'strip'):
+            if conf.strip.isdigit():
+                conf.strip = int(conf.strip)
+            elif len(conf.strip) == 'auto':
+                conf.strip = os.path.commonprefix(rdirs.keys())
 
         for directory, files in rdirs.items():
             ConvertDirectory(conf, directory, files)
